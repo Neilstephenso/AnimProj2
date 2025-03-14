@@ -1,4 +1,14 @@
-// AnimProj2.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// ASCII Animation Project
+// 
+// Project written by: Neil Stephenson
+// Date: 3/14/25
+// 
+// 
+// This file simply draws a cube in a console window space and rotates that cube based upon a preinputted set of matrix equations.
+//	Heavy inspiration was taken from Servet Gulnaroglu on youtube, and I plan to add more funtionality to this later such as 
+//	being able to animate triangles for more complex shapes.
+// 
+// TODO: Add functionality to animate triangular planes.
 //
 
 #pragma once
@@ -20,6 +30,7 @@ int backgroundASCII = ' ';
 double incrementSpeed = 0.6;
 int distanceFromCam = 120;
 double ooz;
+//x position / y position
 int xp, yp;
 double K1 = 40;
 int idx;
@@ -62,6 +73,7 @@ static void calculateSurface(double triX, double triY, double triZ, char c) {
 	}
 }
 
+// Calculations for a triangular plane instead of a square one.
 static void calculateTriangleSurface(double triX, double triY, double triZ, char c) {
 	x = calculateX(triX, triY, triZ);
 	y = calculateY(triX, triY, triZ);
@@ -81,11 +93,11 @@ int main()
 			for (float triY = -triangleWidth; triY < triangleWidth; triY += incrementSpeed) {
 
 				calculateSurface(triX, triY, -triangleWidth, '@');
-				/*calculateSurface(-triX, triY, triangleWidth, '~');
+				calculateSurface(-triX, triY, triangleWidth, '~');
 				calculateSurface(triX, -triangleWidth, -triY, '0');
 				calculateSurface(triX, triangleWidth, triY, 'X');
 				calculateSurface(triangleWidth, triY, triX, '+');
-				calculateSurface(-triangleWidth, triY, -triX, '*');*/
+				calculateSurface(-triangleWidth, triY, -triX, '*');
 			}
 		}
 		printf("\x1b[H");
