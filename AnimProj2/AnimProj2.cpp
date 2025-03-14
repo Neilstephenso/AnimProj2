@@ -34,6 +34,8 @@ double ooz;
 int xp, yp;
 double K1 = 40;
 int idx;
+//count for triangle ?
+int p = 0;
 
 static double calculateX(int i, int j, int k) {
 	return j * sin(A) * sin(B) * cos(C) 
@@ -75,9 +77,28 @@ static void calculateSurface(double triX, double triY, double triZ, char c) {
 
 // Calculations for a triangular plane instead of a square one.
 static void calculateTriangleSurface(double triX, double triY, double triZ, char c) {
-	x = calculateX(triX, triY, triZ);
+    /*count -= 1;
+	x = calculateX(triX / 2, triY - count, triZ);
 	y = calculateY(triX, triY, triZ);
 	z = calculateZ(triX, triY, triZ) + distanceFromCam;
+	*/
+
+	x = calculateX(triX, triY, triZ) / 2;
+	y = calculateY(triX, triY, triZ);
+	z = calculateZ(triX, triY, triZ) + distanceFromCam;
+
+	ooz = 1 / z;
+
+	xp = (int)(width / 2 + K1 * ooz * x * 4);
+	yp = (int)(height / 2 + K1 * ooz * y * 2);
+
+	idx = xp + yp * width;
+	if (idx >= 0 && idx < width * height) {
+		if (ooz > zBuffer[idx]) {
+			zBuffer[idx] = ooz;
+			buffer[idx] = c;
+		}
+	}
 }
 
 int main()
@@ -92,12 +113,13 @@ int main()
 
 			for (float triY = -triangleWidth; triY < triangleWidth; triY += incrementSpeed) {
 
-				calculateSurface(triX, triY, -triangleWidth, '@');
+				calculateTriangleSurface(triX, triY, triangleWidth, '#');
+				/*calculateSurface(triX, triY, -triangleWidth, '@');
 				calculateSurface(-triX, triY, triangleWidth, '~');
 				calculateSurface(triX, -triangleWidth, -triY, '0');
 				calculateSurface(triX, triangleWidth, triY, 'X');
 				calculateSurface(triangleWidth, triY, triX, '+');
-				calculateSurface(-triangleWidth, triY, -triX, '*');
+				calculateSurface(-triangleWidth, triY, -triX, '*');*/
 			}
 		}
 		printf("\x1b[H");
